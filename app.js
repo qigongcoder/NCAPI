@@ -4,15 +4,16 @@ const {
     getTopics,
     getEndPoints,
     getArticleById,
+    getArticles,
 } = require("./controllers/news-controllers");
-
-app.use(express.json())
 
 app.get('/api/topics',getTopics);
 
 app.get('/api/',getEndPoints);
 
 app.get('/api/article/:article_id',getArticleById);
+
+app.get('/api/articles',getArticles)
 
 
 app.use((error, request, response, next)=>{

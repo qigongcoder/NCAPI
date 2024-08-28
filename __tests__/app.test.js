@@ -6,6 +6,11 @@ const data = require("../db/data/test-data/index");
 const seed = require("../db/seeds/seed");
 const db = require("../db/connection");
 
+const {
+    getCommentCount
+  } = require ("../models/utils")
+  
+
 beforeEach(()=>seed(data));
 afterAll(()=>db.end());
 
@@ -77,3 +82,58 @@ describe("GET: /api/articles/:article_id", ()=>{
 
 });
 
+describe("GET: /api/articles", ()=>{
+
+	test("status 200: responds with an articles array of article objects",()=>{
+        return request(app)
+            .get("/api/articles")
+            .expect(200)
+            .then(({body})=>{
+                expect(body.length).toBe(13);
+                expect(Array.isArray(body)).toBe(true);
+                body.forEach(article=>{
+                    expect(typeof article.author).toBe("string");
+                    expect(typeof article.title).toBe("string");
+                    expect(typeof article.article_id).toBe("number");
+                    expect(typeof article.topic).toBe("string");
+                    expect(typeof article.created_at).toBe("string");
+                    expect(typeof article.votes).toBe("number");
+                    expect(typeof article.article_img_url).toBe("string");
+                    expect(typeof article.comment_count).toBe("number");
+                });
+/*
+can't work out how to get jestsorted installed properly as I kept being told that toBeSortedBy is not a function             
+                expect(body.articles).toBeSortedBy("created_at",{
+                    descending: false
+                })
+*/                    
+
+            })
+    })
+})
+
+
+//tried putting this in the other utils testfolder and got lots of jest errors
+describe("getCommentCount",()=>{
+    test("returns correct comment count for article",()=>{
+        const input = 3;
+        return getCommentCount(input)
+        .then(data=>{
+            expect(data).toBe(2)
+        })
+    })
+    test("does not mutate origin input",()=>{
+        const input = 3;
+        return getCommentCount(input)
+        .then(()=>{
+            expect(input).toBe(input)
+        })
+    })
+    test("returns 0 comment count for invalid article",()=>{
+        const input = 1000;
+        return getCommentCount(input)
+        .then(data=>{
+            expect(data).toBe(0)
+        })
+    })
+  })
