@@ -37,6 +37,7 @@ describe("/api",()=>{
 
 
 describe("GET: /api/articles/:article_id", ()=>{
+
 	test("status 200: respond with the requested article_id",()=>{
 		return request(app)
 		    .get("/api/article/1/")
@@ -54,4 +55,25 @@ describe("GET: /api/articles/:article_id", ()=>{
                 })
             })
     })
-})
+    
+	test("400: responds with BAD REQUEST for invalid article_id", ()=>{
+		return request(app)
+			.get("/api/article/invalid_id")
+			.expect(400)
+			.then((response)=>{
+				const {body:{message}} = response;
+				expect (message).toBe("BAD REQUEST")
+		});
+	});
+
+    test("404: responds with NOT FOUND for valid but non-existent snack_id",()=>{
+        return request(app)
+            .get("/api/article/1000")
+            .expect(404)
+            .then((response)=>{
+                expect(response.body.message).toBe("NOT FOUND");
+            });
+        });
+
+});
+
