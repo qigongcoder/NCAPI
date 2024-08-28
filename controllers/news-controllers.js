@@ -29,7 +29,6 @@ exports.getArticleById = (request, response,next) => {
 
 exports.getArticles = (request, response, next) =>{
     fetchArticles().then((articles)=>{
-        console.log(articles)
         response.status(200).send(articles)
     })
     .catch((error)=>{

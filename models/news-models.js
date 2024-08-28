@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const {getCommentCount} = require("./utils")
 
 exports.selectTopics = () =>{
     return db.query("SELECT * FROM topics;")
@@ -19,8 +20,18 @@ exports.selectArticleById = (article_id)=>{
 };
 
 exports.fetchArticles = () =>{
-    return db.query("SELECT * FROM articles;")
+    let listOfArticles = []
+    return db.query("SELECT author, title, article_id, topic, created_at, votes, article_img_url FROM articles ORDER BY created_at DESC;")
     .then((result)=>{
-            return result.rows
-        });
+         listOfArticles = result.rows;
+        const articleCountPromise = listOfArticles.map(article=>{
+            return getCommentCount(article.article_id)
+        })
+        return Promise.all(articleCountPromise)
+    }).then(articleCount=>{
+        for(let i=0;i<listOfArticles.length;i++){
+            listOfArticles[i].comment_count = articleCount[i]
+        }
+        return listOfArticles;
+    })
 }
