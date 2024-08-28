@@ -17,3 +17,10 @@ exports.selectArticleById = (article_id)=>{
 			return rows[0]
 	});
 };
+
+exports.fetchArticles = () =>{
+    return db.query("SELECT * FROM articles;")
+    .then((result)=>{
+            return result.rows
+        });
+}

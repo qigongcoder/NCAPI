@@ -77,3 +77,18 @@ describe("GET: /api/articles/:article_id", ()=>{
 
 });
 
+describe("GET: /api/articles", ()=>{
+
+	test("status 200: responds with an articles array of article objects",()=>{
+        return request(app)
+            .get("/api/articles")
+            .expect(200)
+            .then(({body})=>{
+                expect(body.length).toBe(13)
+                expect(Array.isArray(body)).toBe(true);
+
+            })
+    })
+})
+
+
