@@ -2,6 +2,7 @@ const {
     selectTopics,
     selectArticleById,
     fetchArticles,
+    fetchArticleComments,
 } = require("../models/news-models.js");
 
 const endPoints = require("../endpoints.json");
@@ -30,6 +31,16 @@ exports.getArticleById = (request, response,next) => {
 exports.getArticles = (request, response, next) =>{
     fetchArticles().then((articles)=>{
         response.status(200).send({articles})
+    })
+    .catch((error)=>{
+        next(error)
+    })
+}
+
+exports.getArticleComments = (request, response, next)=>{
+    const {article_id} = request.params;
+    fetchArticleComments(article_id).then((comments)=>{
+        response.status(200).send({comments})
     })
     .catch((error)=>{
         next(error)

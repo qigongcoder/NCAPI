@@ -90,7 +90,6 @@ describe("GET: /api/articles", ()=>{
             .expect(200)
             .then(({body})=>{
                 expect(body.articles.length).toBe(13);
-                expect(Array.isArray(body.articles)).toBe(true);
                 body.articles.forEach(article=>{
                     expect(typeof article.author).toBe("string");
                     expect(typeof article.title).toBe("string");
@@ -108,8 +107,51 @@ describe("GET: /api/articles", ()=>{
     })
 })
 
+describe("GET: /api/articles/:article_id/comments",()=>{
 
-//tried putting this in the other utils testfolder and got lots of jest errors
+    test("status 200: responds with all the comments for a given article",()=>{
+        return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then(({body})=>{
+            console.log(body)
+            expect(body.comments.length).toBe(11);
+            body.comments.forEach(comment=>{
+                expect(typeof comment.comment_id).toBe("number");
+                expect(typeof comment.votes).toBe("number");
+                expect(typeof comment.created_at).toBe("string");
+                expect(typeof comment.author).toBe("string");
+                expect(typeof comment.body).toBe("string");
+                expect(typeof comment.article_id).toBe("number");
+            })
+            expect(body.comments).toBeSortedBy("created_at",{
+                descending: true
+            })
+        })
+    })
+
+    test("status 400: responds with BAD REQUEST for invalid article_id",()=>{
+        return request(app)
+        .get("/api/articles/X/comments")
+        .expect(400)
+        .then(response=>{
+            const {body:{message}} = response;
+            expect (message).toBe("BAD REQUEST")
+        })
+    })
+
+    test("404: responds with NOT FOUND for valid but non-existent snack_id",()=>{
+        return request(app)
+            .get("/api/articles/1000/comments")
+            .expect(404)
+            .then((response)=>{
+                expect(response.body.message).toBe("NOT FOUND");
+            });
+        });
+
+
+})
+
 describe("getCommentCount",()=>{
     test("returns correct comment count for article",()=>{
         const input = 3;
