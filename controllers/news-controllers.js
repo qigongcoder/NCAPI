@@ -29,7 +29,7 @@ exports.getArticleById = (request, response,next) => {
 
 exports.getArticles = (request, response, next) =>{
     fetchArticles().then((articles)=>{
-        response.status(200).send(articles)
+        response.status(200).send({articles})
     })
     .catch((error)=>{
         next(error)
