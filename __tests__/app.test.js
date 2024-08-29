@@ -114,7 +114,6 @@ describe("GET: /api/articles/:article_id/comments",()=>{
         .get("/api/articles/1/comments")
         .expect(200)
         .then(({body})=>{
-            console.log(body)
             expect(body.comments.length).toBe(11);
             body.comments.forEach(comment=>{
                 expect(typeof comment.comment_id).toBe("number");
@@ -140,7 +139,7 @@ describe("GET: /api/articles/:article_id/comments",()=>{
         })
     })
 
-    test("404: responds with NOT FOUND for valid but non-existent snack_id",()=>{
+    test("404: responds with NOT FOUND for valid but non-existent article_id",()=>{
         return request(app)
             .get("/api/articles/1000/comments")
             .expect(404)
