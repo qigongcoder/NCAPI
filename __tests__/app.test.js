@@ -89,9 +89,9 @@ describe("GET: /api/articles", ()=>{
             .get("/api/articles")
             .expect(200)
             .then(({body})=>{
-                expect(body.length).toBe(13);
-                expect(Array.isArray(body)).toBe(true);
-                body.forEach(article=>{
+                expect(body.articles.length).toBe(13);
+                expect(Array.isArray(body.articles)).toBe(true);
+                body.articles.forEach(article=>{
                     expect(typeof article.author).toBe("string");
                     expect(typeof article.title).toBe("string");
                     expect(typeof article.article_id).toBe("number");
@@ -101,13 +101,9 @@ describe("GET: /api/articles", ()=>{
                     expect(typeof article.article_img_url).toBe("string");
                     expect(typeof article.comment_count).toBe("number");
                 });
-/*
-can't work out how to get jestsorted installed properly as I kept being told that toBeSortedBy is not a function             
                 expect(body.articles).toBeSortedBy("created_at",{
-                    descending: false
+                    descending: true
                 })
-*/                    
-
             })
     })
 })
