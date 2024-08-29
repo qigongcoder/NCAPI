@@ -39,5 +39,17 @@
         "article_img_url":
         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
       }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "get all comments for an article",
+    "queries": [],
+    "exampleResponse": {
+      "comment_id": 9,
+      "votes": 0,
+      "created_at": "2020-01-01T03:08:00.000Z",
+      "author": "icellusedkars",
+      "body": "Superficially charming",
+      "article_id": 1
+      }
   }
 }
