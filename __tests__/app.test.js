@@ -1,6 +1,7 @@
 const request = require('supertest');
 const app = require("../app");
 const endPoints = require("../endpoints.json");
+const users = require("../db/data/test-data/users")
 
 const data = require("../db/data/test-data/index");
 const seed = require("../db/seeds/seed");
@@ -286,6 +287,18 @@ describe("DELETE: /api/comments/:comment_id", () => {
             });
     });
 });
+
+
+describe("/api/users", () => {
+    test("Tests that this endpoint responds with all the users", () => {
+        return request(app)
+            .get("/api/users")
+            .expect(200)
+            .then((response)=>{
+                expect(response.body.users).toMatchObject(users)
+            })
+    })
+})
 
 
 
