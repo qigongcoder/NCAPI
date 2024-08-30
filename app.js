@@ -9,6 +9,7 @@ const {
 	postComment,
 	patchVoteCount,
 	deleteCommentById,
+	getUsers,
 } = require("./controllers/news-controllers");
 
 app.use(express.json());
@@ -28,6 +29,8 @@ app.post('/api/articles/:article_id/comments',postComment)
 app.patch('/api/articles/:article_id',patchVoteCount)
 
 app.delete('/api/comments/:comment_id', deleteCommentById);
+
+app.get('/api/users',getUsers);
 
 
 

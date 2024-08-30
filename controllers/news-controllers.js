@@ -6,6 +6,7 @@ const {
     insertComment,
     incrementVoteCount,
     removeCommentById,
+    fetchUsers,
 } = require("../models/news-models.js");
 
 const endPoints = require("../endpoints.json");
@@ -81,4 +82,10 @@ exports.deleteCommentById = (request, response, next) => {
         .catch((error) => {
             next(error)
         })
+};
+
+exports.getUsers = (request, response) => {
+    fetchUsers().then((users) => {
+        response.status(200).send({ users });
+    });
 };
