@@ -201,65 +201,91 @@ describe("POST: /api/articles/:article_id/comments", () => {
 });
 
 
-describe("PATCH: /api/articles/:article_id", ()=>{
+describe("PATCH: /api/articles/:article_id", () => {
 
-    test('PATCH: 200 changes vote count of given article by given value',()=>{
-        const voteChange = {inc_votes: 1};
+    test('PATCH: 200 changes vote count of given article by given value', () => {
+        const voteChange = { inc_votes: 1 };
         return request(app)
-        .patch('/api/articles/1')
-        .send(voteChange)
-        .expect(200)
-        .then((response)=>{
-            expect(response.body.article.votes).toBe(101)            
-        })
+            .patch('/api/articles/1')
+            .send(voteChange)
+            .expect(200)
+            .then((response) => {
+                expect(response.body.article.votes).toBe(101)
+            })
     })
 
-    test('PATCH: 200 changes vote count of given article by given value while ignoring uneccessary key values in send object',()=>{
-        const voteChange = {inc_votes: 1, extra_info : 0};
+    test('PATCH: 200 changes vote count of given article by given value while ignoring uneccessary key values in send object', () => {
+        const voteChange = { inc_votes: 1, extra_info: 0 };
         return request(app)
-        .patch('/api/articles/1')
-        .send(voteChange)
-        .expect(200)
-        .then((response)=>{
-            expect(response.body.article.votes).toBe(101)            
-        })
+            .patch('/api/articles/1')
+            .send(voteChange)
+            .expect(200)
+            .then((response) => {
+                expect(response.body.article.votes).toBe(101)
+            })
     })
 
-    test('PATCH: 404 error value when given non-existent article_id',()=>{
-        const voteChange = {inc_votes: 1};
+    test('PATCH: 404 error value when given non-existent article_id', () => {
+        const voteChange = { inc_votes: 1 };
         return request(app)
-        .patch('/api/articles/100')
-        .send(voteChange)
-        .expect(404)
-        .then((response) => {
-            expect(response.body.message).toBe('NOT FOUND');
-        });
+            .patch('/api/articles/100')
+            .send(voteChange)
+            .expect(404)
+            .then((response) => {
+                expect(response.body.message).toBe('NOT FOUND');
+            });
     })
 
-    test('PATCH: 404 error value when given invalid article_id',()=>{
-        const voteChange = {inc_votes: 1};
+    test('PATCH: 404 error value when given invalid article_id', () => {
+        const voteChange = { inc_votes: 1 };
         return request(app)
-        .patch('/api/articles/X')
-        .send(voteChange)
-        .expect(400)
-        .then((response) => {
-            expect(response.body.message).toBe('BAD REQUEST');
-        });
+            .patch('/api/articles/X')
+            .send(voteChange)
+            .expect(400)
+            .then((response) => {
+                expect(response.body.message).toBe('BAD REQUEST');
+            });
     })
 
-    test('PATCH: 404 error value when given incorrect key in patch body',()=>{
-        const voteChange = {xxxx: 1};
+    test('PATCH: 404 error value when given incorrect key in patch body', () => {
+        const voteChange = { xxxx: 1 };
         return request(app)
-        .patch('/api/articles/X')
-        .send(voteChange)
-        .expect(400)
-        .then((response) => {
-            expect(response.body.message).toBe('BAD REQUEST');
-        });
+            .patch('/api/articles/X')
+            .send(voteChange)
+            .expect(400)
+            .then((response) => {
+                expect(response.body.message).toBe('BAD REQUEST');
+            });
     })
 
 })
 
+describe("DELETE: /api/comments/:comment_id", () => {
+
+    test('DELETE:204 deletes the specified comment and sends no body back', () => {
+        return request(app)
+        .delete('/api/comments/1')
+        .expect(204);
+    });
+
+    test('DELETE:404 responds with an appropriate status and error message when given a non-existent id', () => {
+        return request(app)
+            .delete('/api/comments/999')
+            .expect(404)
+            .then((response) => {
+                expect(response.body.message).toBe('NOT FOUND');
+            });
+    });
+
+    test('DELETE:400 responds with an appropriate status and error message when given an invalid id', () => {
+        return request(app)
+            .delete('/api/comments/not-a-comment')
+            .expect(400)
+            .then((response) => {
+                expect(response.body.message).toBe('BAD REQUEST');
+            });
+    });
+});
 
 
 
