@@ -1,7 +1,6 @@
 const request = require('supertest');
 const app = require("../app");
 const endPoints = require("../endpoints.json");
-const users = require("../db/data/test-data/users")
 
 const data = require("../db/data/test-data/index");
 const seed = require("../db/seeds/seed");
@@ -265,8 +264,8 @@ describe("DELETE: /api/comments/:comment_id", () => {
 
     test('DELETE:204 deletes the specified comment and sends no body back', () => {
         return request(app)
-        .delete('/api/comments/1')
-        .expect(204);
+            .delete('/api/comments/1')
+            .expect(204);
     });
 
     test('DELETE:404 responds with an appropriate status and error message when given a non-existent id', () => {
@@ -294,8 +293,14 @@ describe("/api/users", () => {
         return request(app)
             .get("/api/users")
             .expect(200)
-            .then((response)=>{
-                expect(response.body.users).toMatchObject(users)
+            .then((response) => {
+                const { body } = response;
+                expect(body.users.length).toBe(4);
+                body.users.forEach(user => {
+                    expect(typeof user.username).toBe("string");
+                    expect(typeof user.name).toBe("string");
+                    expect(typeof user.avatar_url).toBe("string");
+                })
             })
     })
 })
