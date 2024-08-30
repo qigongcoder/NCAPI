@@ -4,6 +4,7 @@ const {
     fetchArticles,
     fetchArticleComments,
     insertComment,
+    incrementVoteCount,
 } = require("../models/news-models.js");
 
 const endPoints = require("../endpoints.json");
@@ -57,5 +58,15 @@ exports.postComment=(request, response, next)=>{
     .catch((error)=>{
         next(error)
     });
+}
 
+exports.patchVoteCount=(request, response, next)=>{
+    const voteChange = request.body
+    const article_id = request.params;
+    incrementVoteCount(voteChange,article_id).then(article=>{
+        response.status(200).send({article})
+    })
+    .catch((error)=>{
+        next(error)
+    })
 }
