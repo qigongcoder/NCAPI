@@ -8,6 +8,7 @@ const {
 	getArticleComments,
 	postComment,
 	patchVoteCount,
+	deleteCommentById,
 } = require("./controllers/news-controllers");
 
 app.use(express.json());
@@ -25,6 +26,11 @@ app.get('/api/articles/:article_id/comments',getArticleComments)
 app.post('/api/articles/:article_id/comments',postComment)
 
 app.patch('/api/articles/:article_id',patchVoteCount)
+
+app.delete('/api/comments/:comment_id', deleteCommentById);
+
+
+
 
 app.use((error, request, response, next)=>{
 	if(error.status && error.message){
