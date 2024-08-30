@@ -148,8 +148,53 @@ describe("GET: /api/articles/:article_id/comments",()=>{
             });
         });
 
+    test('POST:201 inserts a new comment for an article and sends the comment back to the client', () => {
+        const newComment = {
+            username: "butter_bridge",
+            body: "hi",
+        };
+        return request(app)
+            .post('/api/articles/2/comments')
+            .send(newComment)
+            .expect(201)
+            .then((response) => {
+            expect(response.body.comment.article_id).toBe(2);
+            expect(response.body.comment.author).toBe('butter_bridge');
+            expect(response.body.comment.body).toBe('hi');
+            });
+        });
 
-})
+        test('POST:400 responds with an appropriate status and error message when provided with a bad comment (no user name)', () => {
+            const newComment = {
+                body: "XXX"
+            };            
+        return request(app)
+            .post('/api/articles/1/comments')
+            .send(newComment)
+            .expect(400)
+            .then((response) => {
+            expect(response.body.message).toBe('BAD REQUEST');
+            });
+        });
+
+        test("POST 400: responds with BAD REQUEST for invalid article_id",()=>{
+            const newComment = {
+                username: "butter_bridge",
+                body: "hi",
+            };
+            return request(app)
+                .post('/api/articles/X/comments')
+                .send(newComment)
+                .expect(400)
+                .then(response=>{
+                const {body:{message}} = response;
+                expect (message).toBe("BAD REQUEST")
+            })
+        })
+
+    });
+        
+
 
 describe("getCommentCount",()=>{
     test("returns correct comment count for article",()=>{

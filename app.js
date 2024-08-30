@@ -6,7 +6,10 @@ const {
     getArticleById,
     getArticles,
 	getArticleComments,
+	postComment,
 } = require("./controllers/news-controllers");
+
+app.use(express.json());
 
 app.get('/api/topics',getTopics);
 
@@ -18,7 +21,7 @@ app.get('/api/articles',getArticles)
 
 app.get('/api/articles/:article_id/comments',getArticleComments)
 
-
+app.post('/api/articles/:article_id/comments',postComment)
 
 app.use((error, request, response, next)=>{
 	if(error.status && error.message){
@@ -35,6 +38,12 @@ app.use((error, request, response, next)=>{
 		next(error);
 	}
 });
+
+app.use((error, request, response, next)=>{
+	if(error.code==="23502"){
+		response.status(400).send({message: "BAD REQUEST"})
+	}
+})
 
 
 

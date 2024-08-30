@@ -3,6 +3,7 @@ const {
     selectArticleById,
     fetchArticles,
     fetchArticleComments,
+    insertComment,
 } = require("../models/news-models.js");
 
 const endPoints = require("../endpoints.json");
@@ -45,4 +46,16 @@ exports.getArticleComments = (request, response, next)=>{
     .catch((error)=>{
         next(error)
     })
+}
+
+exports.postComment=(request, response, next)=>{
+    const newComment = request.body;
+    const article_id=request.params;
+    insertComment(newComment, article_id).then((comment)=>{
+        response.status(201).send({comment})
+    })
+    .catch((error)=>{
+        next(error)
+    });
+
 }
