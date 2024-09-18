@@ -16,16 +16,11 @@
   },
   "GET /api/articles": {
     "description": "serves an array of all articles",
-    "queries": [
-      "author",
-      "topic",
-      "sort_by",
-      "order"
-    ],
+    "queries": ["author", "topic", "sort_by", "order"],
     "exampleResponse": {
       "articles": [
         {
-          "title": "Seafood substitutions are increasing",
+          "title": "Seafood substitutions are increasing a bit",
           "topic": "cooking",
           "author": "weegembump",
           "body": "Text from the article..",
@@ -94,7 +89,7 @@
   "GET /api/users": {
     "description": "serves an array of all users",
     "queries": [],
-    "exampleResponse":[
+    "exampleResponse": [
       {
         "username": "butter_bridge",
         "name": "jonny",
@@ -115,7 +110,6 @@
         "name": "do_nothing",
         "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
       }
-    ]    
-
+    ]
   }
 }
